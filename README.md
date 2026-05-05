@@ -1,241 +1,287 @@
-# Annex Technologies Limited — Technical Assessment
+# Annex Technologies Limited — Data Engineer Case Study
 
-**Congratulations on reaching the technical assessment stage!**
+## ABC Phones Credit Portfolio Analysis
 
-This assessment is designed to evaluate your problem-solving skills, coding proficiency, and ability to work across multiple programming domains. Please read the instructions carefully before beginning.
-
----
-
-## 📋 Assessment Overview
-
-- **Duration:** 2 hours
-- **Total Questions:** 3 (covering C, MySQL, and C++)
-- **Required Submissions:** 3 source files
-- **Evaluation Focus:** Correctness, efficiency, code quality, and edge case handling
+**Position:** Data Engineer  
+**Expected Time Commitment:** 72 hours  
+**Submission Format:** Slide deck (maximum 12 slides) + GitHub repository or zipped code folder
 
 ---
 
-## 📝 General Instructions
+## 🎯 Our Mission
 
-1. You have **2 hours** to complete this assessment.
-2. Read each question thoroughly before attempting to solve it.
-3. You may use online resources and documentation, but **AI code generators (ChatGPT, GitHub Copilot, etc.) are strictly prohibited**.
-4. Submit your solutions as separate files with the following names:
-   - `pth_factor.c`
-   - `top_students.sql`
-   - `top_articles.cpp`
-5. Ensure all code compiles and runs without errors.
-6. Test your solutions with the provided sample inputs before submission.
+At Annex Technologies, we build scalable data infrastructure that powers intelligent decision-making across East Africa. We believe well-architected data pipelines are the foundation of great analytics, and we're looking for engineers who can design, build, and productionize them at scale.
 
 ---
 
-## 🧪 Question 1: Find the p-th Factor (C)
+## 📚 Case Study Overview
 
-### Problem Statement
+ABC Phones offers smartphones to customers through installment-based credit plans and manages these accounts throughout the repayment period. Customers make regular payments toward their outstanding balances, and credit decisions play a critical role in both portfolio performance and customer experience.
 
-Given two integers, `n` and `p`, find the **p-th smallest factor** of `n`.
+While ABC Phones has systems to process payments and manage accounts, their data engineering and analytics infrastructure is still maturing. **Your challenge is to design and build the data systems that will enable reliable, repeatable analysis.**
 
-A factor of `n` is any positive integer that divides `n` with no remainder.
+### Provided Datasets
+
+| Dataset | Description | Contents |
+|---------|-------------|----------|
+| **Credit Data (1).zip** | Credit portfolio snapshots — point-in-time views across multiple reporting dates | Account balances, payment history, status, arrears |
+| **Sales and Customer Data (1).zip** | Customer demographics and sales records | DOB, income fields, employment duration, acquisition data |
+| **NPS Data (1).xlsx** | NPS survey responses — linked to customer IDs | Customer satisfaction metrics, feedback |
+
+**Note:** These datasets contain real-world inconsistencies, missing values, and structural challenges — exactly what you'd encounter in a production environment.
+
+---
+
+## 👷 Your Role
+
+As a Data Engineer, your job is **not just to analyse** — it's to design the systems that make analysis reliable, repeatable, and scalable. You will demonstrate systems thinking, data quality discipline, and the ability to communicate to both technical and non-technical stakeholders.
+
+---
+
+## 📋 Part 1: Data Preparation & Pipeline Design (40% of Evaluation)
+
+### 1A. Data Profiling & Cleaning
+
+Before any analysis can begin, you must thoroughly understand the raw data.
+
+**Complete the following:**
+
+- **Profile all three datasets:**
+  - Row counts and column data types
+  - Null percentages for each column
+  - Data inconsistencies (date formats, currency formats, duplicate IDs, etc.)
+  - Relationship analysis between datasets (join keys, cardinality, foreign key integrity)
+
+- **Document your findings:**
+  - Create a data quality report showing inconsistencies discovered
+  - State all assumptions clearly (e.g., how you handle missing values, date interpretations)
+  - Justify every cleaning decision
+
+### 1B. Feature Engineering
+
+Derive the following fields programmatically (using Python/SQL — not manually in Excel):
+
+| Feature | Definition | Bands/Categories |
+|---------|-----------|-------------------|
+| `age_band` | Calculate age from DOB as at each reporting date | 18–25, 26–35, 36–45, 46–55, 55+ |
+| `avg_monthly_income_band` | Sum all income-related columns; divide by employment duration | Below 5,000 / 5,000–9,999 / 10,000–19,999 / 20,000–29,999 / 30,000–49,999 / 50,000–99,999 / 100,000–149,999 / 150,000+ |
+| `days_past_due` | Days between payment due date and reporting date (0 if no arrears) | Integer |
+| `risk_category` | Derived from account status, arrears amount, and payment history patterns | Define your logic (e.g., Low / Medium / High / Critical) |
+
+**Requirement:** Show your feature engineering logic in clean, documented code.
+
+### 1C. ETL Pipeline Design
+
+Design a **batch ETL pipeline** that ingests the three source files and produces clean, analytics-ready data tables.
+
+**Your answer must include:**
+
+- **Architecture Diagram**
+  - Illustrate data flow from source → ingestion → transformation → storage
+  - Show tools/technologies (e.g., Python + Pandas, dbt, SQL, cloud services)
+  - Include error handling and logging paths
+  
+- **Ingestion Strategy**
+  - Full load vs. incremental load approach
+  - Scheduling and frequency (daily, weekly, etc.)
+  - Handling of late-arriving or duplicate data
+
+- **Transformation Logic**
+  - Data cleaning and standardization steps
+  - Deduplication rules
+  - Enrichment (e.g., joining customer and credit data)
+  - Feature engineering automation
+  
+- **Storage & Output Design**
+  - What analytics-ready tables/views would you create?
+  - How would analysts query this data?
+  - Partitioning strategy (e.g., by reporting date, customer segment)
+
+- **Error Handling & Recovery**
+  - What happens if a source file is missing or malformed?
+  - How do you alert stakeholders?
+  - How do you ensure data consistency?
+
+**Deliverable:** 
+- Architecture diagram (PNG or PDF)
+- 2–3 slides explaining key engineering decisions
+- Annotated code or pseudocode for critical transformation steps
+
+---
+
+## 🛡️ Part 2: Data Quality Framework (35% of Evaluation)
+
+As ABC Phones' customer base grows, data quality becomes mission-critical. Design a robust monitoring framework.
 
 ### Requirements
 
-- Find all positive factors of `n`
-- Sort them in ascending order
-- Return the **p-th smallest factor** (using 1-based indexing)
-- If `n` has fewer than `p` factors, return `0`
+**1. Implement 5 Specific Data Quality Checks**
 
-### Constraints
+Examples (choose yours based on the data):
+- **Freshness:** Is data arriving on schedule? (e.g., daily portfolio snapshot by 6 AM)
+- **Uniqueness:** Are there unexpected duplicate customer or account records?
+- **Referential Integrity:** Do all customer IDs in credit data exist in customer master?
+- **Range Checks:** Are ages between 18–120? Are income values within reasonable bounds?
+- **Null Thresholds:** What percentage of missing values is acceptable per column?
 
-- `1 ≤ n ≤ 10¹⁵`
-- `1 ≤ p ≤ 10⁹`
+**2. Alerting Strategy**
 
-### Example
+- How does the team know when a check fails?
+- Who gets notified (data engineer, analyst, business stakeholder)?
+- What's the escalation path for critical failures?
 
-**Input:** `n = 10, p = 3`  
-**Output:** `5`
+**3. Real Example from Provided Data**
 
-**Explanation:**  
-Factors of 10: `{1, 2, 5, 10}`  
-The 3rd factor is `5`.
+Identify one actual inconsistency or anomaly in the provided datasets and explain how your framework would detect it before it reached analysts.
 
-### Function Signature
+**4. Monitoring Cadence**
 
-```c
-long pthFactor(long n, long p) {
-    // Your code here
-}
-```
+Define what's checked:
+- **Real-time:** (e.g., row count thresholds)
+- **Daily:** (e.g., referential integrity)
+- **Weekly:** (e.g., trend analysis for anomalies)
 
-### Evaluation Criteria
-
-- ✓ Correctness of the solution
-- ✓ Efficiency (O(√n) expected)
-- ✓ Proper memory management
-- ✓ Handling of edge cases
+**Deliverable:**
+- Framework overview (1–2 slides in your presentation)
+- SQL or Python example implementation of at least one check
+- Screenshot or log output showing the check in action
 
 ---
 
-## 🧪 Question 2: Top Scoring Students (MySQL)
+## 📊 Part 3: Portfolio Analysis & Insights (25% of Evaluation)
 
-### Problem Statement
+Using your cleaned data and ETL pipeline, answer the following business questions.
 
-Write a SQL query to retrieve the ID and NAME of the **three highest-scoring students**, sorted by score in descending order. For students with matching scores, sort by ID in ascending order.
+### Question 3A: Portfolio Health
 
-### Schema
+Select **3–5 key metrics** to assess credit portfolio performance, such as:
+- Delinquency rate (% of accounts past due)
+- Loss rate (write-offs / total portfolio)
+- Average payment collection rate
+- Customer retention rate
 
-**STUDENT Table:**
+**Analyze:**
+- How do these metrics trend across reporting snapshots?
+- Identify one customer segment (age or income band) where risk behaviour differs meaningfully from the portfolio average
+- Visualize findings clearly
 
-| Column | Type    | Description              |
-|--------|---------|--------------------------|
-| ID     | Integer | Unique ID (Primary Key)  |
-| NAME   | String  | Student name             |
-| SCORE  | Float   | Math score               |
+### Question 3B: Credit Outcomes × Customer Experience
 
-### Sample Input
+Explore the relationship between credit performance and NPS scores.
 
-| ID | NAME  | SCORE |
-|----|-------|-------|
-| 1  | Bob   | 50.0  |
-| 2  | John  | 65.5  |
-| 3  | Harry | 45.0  |
-| 4  | Dick  | 85.0  |
-| 5  | Dev   | 25.0  |
-| 6  | Sid   | 98.0  |
-| 7  | Tom   | 90.0  |
-| 8  | Julia | 70.5  |
-| 9  | Erica | 81.0  |
-| 10 | Jerry | 85.0  |
+**Investigate:**
+- Do customers with lower credit scores report lower NPS?
+- Is there a tension between collections effectiveness and customer satisfaction?
+- Where could ABC Phones improve both outcomes simultaneously?
 
-### Expected Output
+**Recommendation:** Propose one concrete, actionable change ABC Phones should make based on your analysis.
 
-| ID | NAME |
-|----|------|
-| 6  | Sid  |
-| 7  | Tom  |
-| 4  | Dick |
+### Question 3C: Data Gaps & Future Improvements
 
-### Evaluation Criteria
+Critique the source data honestly.
 
-- ✓ Correct sorting (primary: SCORE DESC, secondary: ID ASC)
-- ✓ Proper use of LIMIT clause
-- ✓ Clean and readable query syntax
+**Identify:**
+- What is missing? (e.g., employment type, location data, transaction-level detail)
+- What is inconsistent? (e.g., date formats, income calculation methods)
+- What is ambiguous? (e.g., how is account status defined?)
+
+**Propose 2–3 specific improvements** to how ABC Phones captures or structures data for easier ongoing monitoring.
+
+**Deliverable:** Analysis integrated into your slide deck (not submitted separately)
 
 ---
 
-## 🧪 Question 3: Top Articles API (C++)
+## 📁 Submission Structure
 
-### Problem Statement
-
-Implement a function that retrieves and ranks the top articles from the HackerRank Articles API.
-
-### API Endpoint
+Create a folder and organize your submission as follows:
 
 ```
-https://jsonmock.hackerrank.com/api/articles?page=<pageNumber>
+Annex_DE_<YourName>/
+├── README.md                          # Setup, assumptions, how to run
+├── pipeline_design/
+│   └── architecture.png               # Architecture diagram
+├── scripts/
+│   ├── data_profiling.py              # or .sql — profile all datasets
+│   ├── data_cleaning.py               # Cleaning and standardization
+│   ├── feature_engineering.py         # Feature derivation logic
+│   ├── quality_checks.py/.sql         # Data quality check examples
+│   └── analysis.py/.sql               # Portfolio analysis queries
+├── slides/
+│   └── Annex_DE_Presentation.pdf      # Final presentation deck
+└── outputs/
+    ├── cleaned_summary.csv            # Sample cleaned dataset
+    ├── data_quality_report.md         # Profiling findings
+    └── portfolio_metrics.csv           # Analysis results
 ```
 
-### Requirements
+### Submission Options
 
-- **Pagination:** Fetch all pages of article data using the `total_pages` field from the API response.
-- **Article Name Determination:**
-  - If `title` is not null, use `title`
-  - Otherwise, if `story_title` is not null, use `story_title`
-  - If both are null, skip the article
-- **Sorting:**
-  - **Primary:** Decreasing by `num_comments` (treat null as 0)
-  - **Secondary:** Alphabetically decreasing by article name
-- **Return:** The top `limit` article names
+**Preferred:** Public GitHub repository with complete code and documentation
+- Link must be provided in your submission email
+- Repository should include a clear README with setup and execution instructions
 
-### Function Signature
-
-```cpp
-vector<string> topArticles(int limit) {
-    // Your code here
-}
-```
-
-### Sample
-
-**Input:** `limit = 2`  
-**Output:**
-```
-UK votes to leave EU
-F.C.C. Repeals Net Neutrality Rules
-```
-
-### JSON Response Structure
-
-```json
-{
-  "page": 1,
-  "per_page": 10,
-  "total": 100,
-  "total_pages": 10,
-  "data": [
-    {
-      "title": "Article Title",
-      "story_title": "Story Title",
-      "num_comments": 50,
-      ...
-    }
-  ]
-}
-```
-
-### Evaluation Criteria
-
-- ✓ Correct HTTP request handling and pagination
-- ✓ Accurate JSON parsing
-- ✓ Proper implementation of sorting logic
-- ✓ Handling of null/edge cases
-- ✓ Clean, efficient code structure
+**Alternative:** Zipped folder uploaded to the link provided in your email
+- Name folder as `Annex_DE_<YourName>.zip`
+- Include all files listed above
 
 ---
 
-## 📤 Submission Guidelines
+## ✅ Evaluation Criteria
 
-### Folder Structure
-
-Create a folder with the following naming convention:
-
-```
-Annex_Assessment_<YourName>/
-├── pth_factor.c
-├── top_students.sql
-└── top_articles.cpp
-```
-
-Replace `<YourName>` with your full name (e.g., `Annex_Assessment_John_Doe`).
-
-### Submission Steps
-
-1. Create the folder structure as specified above
-2. Add your three solution files
-3. Compress the folder as a `.zip` file
-4. Upload to the link provided in your email
+| Criterion | What Excellent Looks Like |
+|-----------|---------------------------|
+| **Engineering Thinking** | You design reusable pipelines, not one-off scripts. Code is modular, documented, and production-ready. |
+| **Data Quality Obsession** | You proactively discover issues before they reach analysts. Your checks are specific, not generic. |
+| **Clear Communication** | A junior engineer can run your pipeline; a business stakeholder can understand your slides. |
+| **Documented Assumptions** | You explicitly state how you handled ambiguities (e.g., null values, date formats, income calculations). |
+| **Practical Recommendations** | Insights are specific, actionable, and tied directly to data evidence. |
+| **Code Quality** | Clean syntax, meaningful variable names, helpful comments, proper error handling. |
 
 ---
 
-## ✅ Pre-Submission Checklist
+## 🌟 Optional Bonus (Attempt Only If Time Permits)
 
-Before submitting, please verify:
+If you complete all three parts within the 72-hour window, attempt this bonus:
 
-- [ ] All code compiles without errors or warnings
-- [ ] All solutions have been tested with the provided sample inputs
-- [ ] Edge cases have been considered and handled properly
-- [ ] **No AI-generated code is present in your submission**
-- [ ] All three required files are included in the submission
-- [ ] Folder structure follows the naming convention
+**Sketch a simple data model (ERD or dbt DAG)** showing how you'd structure these datasets for repeatable reporting and analytics.
 
----
+- An annotated diagram is sufficient — no working code required
+- Show relationships between customer, credit, and NPS tables
+- Include any intermediate or derived tables you'd create
 
-## 📞 Support & Clarifications
-
-If you have any questions about the assessment, please reach out to the Talent Acquisition Team at your earliest convenience. We're happy to clarify any ambiguities.
-
-**Best of luck with your assessment!** We look forward to reviewing your solutions.
+**Bonus points:** Demonstrate understanding of dimensional modeling (facts vs. dimensions) or dbt best practices.
 
 ---
 
-**Annex Technologies Limited**  
+## 🧠 What We're Testing
+
+- **Systems thinking:** Can you design pipelines that scale, not one-off analysis scripts?
+- **Data maturity:** Do you proactively seek and fix data quality issues?
+- **Pragmatism:** Can you make meaningful progress with incomplete or messy information?
+- **Communication:** Can you explain technical decisions to both engineers and business stakeholders?
+- **Curiosity:** Do you ask clarifying questions and validate assumptions?
+
+---
+
+## 📞 Questions & Support
+
+If you have any clarifications needed about the case study or datasets, reach out to the Talent Acquisition Team as soon as possible. We're happy to help.
+
+**Important:** Do **not** share your work or discuss the case study with others. This is your individual assessment.
+
+---
+
+## 📅 Timeline Recommendation
+
+- **Hours 0–12:** Data exploration, profiling, and documentation
+- **Hours 12–36:** Data cleaning and feature engineering
+- **Hours 36–60:** ETL pipeline design and quality framework
+- **Hours 60–70:** Portfolio analysis and insights
+- **Hours 70–72:** Presentation refinement and final checks
+
+---
+
+**Thank you for your interest in Annex Technologies. We look forward to reviewing your work!**
+
+*Annex Technologies Limited*  
 *Talent Acquisition Team*
