@@ -1,20 +1,20 @@
-# Annex Technologies Limited — Data Engineer Case Study
+# Annex Technologies Limited. Data Engineer Case Study
 
 ## ABC Phones Credit Portfolio Analysis
 
 **Position:** Data Engineer  
 **Expected Time Commitment:** 72 hours  
-**Submission Format:** Slide deck (maximum 12 slides) + GitHub repository or zipped code folder
+**Submission Format:** Slide deck (maximum 10 slides) + GitHub repository or zipped code folder
 
 ---
 
-## 🎯 Our Mission
+## Our Mission
 
 At Annex Technologies, we build scalable data infrastructure that powers intelligent decision-making across East Africa. We believe well-architected data pipelines are the foundation of great analytics, and we're looking for engineers who can design, build, and productionize them at scale.
 
 ---
 
-## 📚 Case Study Overview
+## Case Study Overview
 
 ABC Phones offers smartphones to customers through installment-based credit plans and manages these accounts throughout the repayment period. Customers make regular payments toward their outstanding balances, and credit decisions play a critical role in both portfolio performance and customer experience.
 
@@ -24,21 +24,17 @@ While ABC Phones has systems to process payments and manage accounts, their data
 
 | Dataset | Description | Contents |
 |---------|-------------|----------|
-| **Credit Data (1).zip** | Credit portfolio snapshots — point-in-time views across multiple reporting dates | Account balances, payment history, status, arrears |
+| **Credit Data (1).zip** | Credit portfolio snapshots, point-in-time views across multiple reporting dates | Account balances, payment history, status, arrears |
 | **Sales and Customer Data (1).zip** | Customer demographics and sales records | DOB, income fields, employment duration, acquisition data |
-| **NPS Data (1).xlsx** | NPS survey responses — linked to customer IDs | Customer satisfaction metrics, feedback |
+| **NPS Data (1).xlsx** | NPS survey responses, linked to customer IDs | Customer satisfaction metrics, feedback |
 
-**Note:** These datasets contain real-world inconsistencies, missing values, and structural challenges — exactly what you'd encounter in a production environment.
-
----
-
-## 👷 Your Role
-
-As a Data Engineer, your job is **not just to analyse** — it's to design the systems that make analysis reliable, repeatable, and scalable. You will demonstrate systems thinking, data quality discipline, and the ability to communicate to both technical and non-technical stakeholders.
+**Note:** These datasets contain real-world inconsistencies, missing values, and structural challenges, exactly what you'd encounter in a production environment.
 
 ---
 
-## 📋 Part 1: Data Preparation & Pipeline Design (40% of Evaluation)
+---
+
+## Part 1: Data Preparation & Pipeline Design
 
 ### 1A. Data Profiling & Cleaning
 
@@ -59,7 +55,7 @@ Before any analysis can begin, you must thoroughly understand the raw data.
 
 ### 1B. Feature Engineering
 
-Derive the following fields programmatically (using Python/SQL — not manually in Excel):
+Derive the following fields programmatically (using Python/SQL):
 
 | Feature | Definition | Bands/Categories |
 |---------|-----------|-------------------|
@@ -109,7 +105,7 @@ Design a **batch ETL pipeline** that ingests the three source files and produces
 
 ---
 
-## 🛡️ Part 2: Data Quality Framework (35% of Evaluation)
+## Part 2: Data Quality Framework
 
 As ABC Phones' customer base grows, data quality becomes mission-critical. Design a robust monitoring framework.
 
@@ -148,7 +144,7 @@ Define what's checked:
 
 ---
 
-## 📊 Part 3: Portfolio Analysis & Insights (25% of Evaluation)
+## Part 3: Portfolio Analysis & Insights
 
 Using your cleaned data and ETL pipeline, answer the following business questions.
 
@@ -191,7 +187,7 @@ Critique the source data honestly.
 
 ---
 
-## 📁 Submission Structure
+## Submission Structure
 
 Create a folder and organize your submission as follows:
 
@@ -220,68 +216,9 @@ Annex_DE_<YourName>/
 - Link must be provided in your submission email
 - Repository should include a clear README with setup and execution instructions
 
-**Alternative:** Zipped folder uploaded to the link provided in your email
-- Name folder as `Annex_DE_<YourName>.zip`
-- Include all files listed above
-
 ---
 
-## ✅ Evaluation Criteria
-
-| Criterion | What Excellent Looks Like |
-|-----------|---------------------------|
-| **Engineering Thinking** | You design reusable pipelines, not one-off scripts. Code is modular, documented, and production-ready. |
-| **Data Quality Obsession** | You proactively discover issues before they reach analysts. Your checks are specific, not generic. |
-| **Clear Communication** | A junior engineer can run your pipeline; a business stakeholder can understand your slides. |
-| **Documented Assumptions** | You explicitly state how you handled ambiguities (e.g., null values, date formats, income calculations). |
-| **Practical Recommendations** | Insights are specific, actionable, and tied directly to data evidence. |
-| **Code Quality** | Clean syntax, meaningful variable names, helpful comments, proper error handling. |
-
----
-
-## 🌟 Optional Bonus (Attempt Only If Time Permits)
-
-If you complete all three parts within the 72-hour window, attempt this bonus:
-
-**Sketch a simple data model (ERD or dbt DAG)** showing how you'd structure these datasets for repeatable reporting and analytics.
-
-- An annotated diagram is sufficient — no working code required
-- Show relationships between customer, credit, and NPS tables
-- Include any intermediate or derived tables you'd create
-
-**Bonus points:** Demonstrate understanding of dimensional modeling (facts vs. dimensions) or dbt best practices.
-
----
-
-## 🧠 What We're Testing
-
-- **Systems thinking:** Can you design pipelines that scale, not one-off analysis scripts?
-- **Data maturity:** Do you proactively seek and fix data quality issues?
-- **Pragmatism:** Can you make meaningful progress with incomplete or messy information?
-- **Communication:** Can you explain technical decisions to both engineers and business stakeholders?
-- **Curiosity:** Do you ask clarifying questions and validate assumptions?
-
----
-
-## 📞 Questions & Support
-
-If you have any clarifications needed about the case study or datasets, reach out to the Talent Acquisition Team as soon as possible. We're happy to help.
-
-**Important:** Do **not** share your work or discuss the case study with others. This is your individual assessment.
-
----
-
-## 📅 Timeline Recommendation
-
-- **Hours 0–12:** Data exploration, profiling, and documentation
-- **Hours 12–36:** Data cleaning and feature engineering
-- **Hours 36–60:** ETL pipeline design and quality framework
-- **Hours 60–70:** Portfolio analysis and insights
-- **Hours 70–72:** Presentation refinement and final checks
-
----
-
-**Thank you for your interest in Annex Technologies. We look forward to reviewing your work!**
+**Thank you for your interest in Annex Technologies. We look forward to reviewing your work**
 
 *Annex Technologies Limited*  
 *Talent Acquisition Team*
